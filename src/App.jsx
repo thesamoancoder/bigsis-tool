@@ -47,12 +47,12 @@ function StatusDot({ status }) {
   return <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: map[status] || C.muted, marginRight: 6, flexShrink: 0, marginTop: 4 }} />;
 }
 
-function Card({ children, style = {} }) {
+function Card({ children, style = {}, ...rest }) {
   return (
     <div style={{
       background: C.white, borderRadius: 12, border: `1px solid ${C.iceDark}`,
       padding: "20px 24px", ...style
-    }}>{children}</div>
+    }} {...rest}>{children}</div>
   );
 }
 
@@ -250,8 +250,9 @@ Be thorough. Extract every entry you can see. If information is partially visibl
 
           {/* Upload zone */}
           <Card style={{ border: `2px dashed ${C.iceDark}`, textAlign: "center", padding: "40px 24px", cursor: "pointer", transition: "border-color 0.2s" }}
-            onDragOver={e => { e.preventDefault(); }}
-            onDrop={e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); }}
+            onDragEnter={e => { e.preventDefault(); e.stopPropagation(); }}
+            onDragOver={e => { e.preventDefault(); e.stopPropagation(); }}
+            onDrop={e => { e.preventDefault(); e.stopPropagation(); handleFile(e.dataTransfer.files[0]); }}
             onClick={() => fileRef.current?.click()}
           >
             <input ref={fileRef} type="file" accept=".pdf" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} />
