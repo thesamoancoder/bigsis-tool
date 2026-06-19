@@ -187,7 +187,8 @@ Be thorough. Extract every entry you can see. If information is partially visibl
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errBody = await response.json().catch(() => ({}));
+        throw new Error(errBody?.error?.message || errBody?.error || `API error: ${response.status}`);
       }
 
       setProgress("Building your tracker...");
@@ -219,7 +220,7 @@ Be thorough. Extract every entry you can see. If information is partially visibl
 
     } catch (e) {
       console.error(e);
-      setError("Something went wrong analysing your file. Please try again or check your internet connection.");
+      setError(`Something went wrong: ${e.message || "Unknown error"}. Please try again.`);
       setStep("upload");
     }
   }
